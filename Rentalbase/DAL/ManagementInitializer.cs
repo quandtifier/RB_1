@@ -1,23 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.Entity;
 using Rentalbase.Models;
 
 namespace Rentalbase.DAL
 {
-    public class ManagementInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<ManagementContext>
+    public class ManagementInitializer : 
+        //System.Data.Entity.DropCreateDatabaseAlways<ManagementContext>
+        System.Data.Entity.DropCreateDatabaseIfModelChanges<ManagementContext>
     {
         protected override void Seed(ManagementContext context)
         {
+            var landlords = new List<Landlord>
+            {
+                new Landlord{ ID=1, Name="Lucas El", Address="6767 Boss Ave Tacoma, WA 98323", Phone="2537876543", Email="le@yahoo.com"},
+                new Landlord{ ID=2, Name="Melissa El", Address="1892 Pleasant Circle Redmond, WA 98793", Phone="2069993333", Email="me@gmail.com"},
+            };
+            landlords.ForEach(s => context.Landlords.Add(s));
+            context.SaveChanges();
+
             var properties = new List<Property>
             {
-                //lots of data here
                 new Property{ ID=1,Street="1235 West Park", City="Kent", State="WA", Zip=98031, Value=350000.00, LandlordID=1, Description="Built 1998"},
                 new Property{ ID=2,Street="678 North Lane", City="Kent", State="WA", Zip=98058, Value=450000.00, LandlordID=1, Description="Built 2009"},
                 new Property{ ID=3,Street="952 South Way", City="Auburn", State="WA", Zip=98001, Value=240000.00, LandlordID=2, Description="Built 2013"},
-                new Property{ ID=4,Street="952 East Place", City="Seattle", State="WA", Zip=98512, Value=650000.00, LandlordID=3, Description="Built 1982"},
+                new Property{ ID=4,Street="952 East Place", City="Seattle", State="WA", Zip=98512, Value=650000.00, LandlordID=2, Description="Built 1982"},
             };
             properties.ForEach(s => context.Properties.Add(s));
             context.SaveChanges();
@@ -29,7 +35,7 @@ namespace Rentalbase.DAL
                 new Lease{ ID=3, PropertyID=3, StartDate=DateTime.Parse("2015-09-01"), DurationInMonths=12, MonthlyRate=1000.00},
                 new Lease{ ID=4, PropertyID=3, StartDate=DateTime.Parse("2015-09-01"), DurationInMonths=12, MonthlyRate=1000.00},
             };
-            leases.ForEach(s => context.Tenants.Add(s));
+            leases.ForEach(s => context.Leases.Add(s));
             context.SaveChanges();
 
             var tenants = new List<Tenant>
